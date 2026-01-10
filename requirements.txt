@@ -1,0 +1,15 @@
+# People Tracker Dependencies
+# ============================
+
+# Core
+numpy>=1.21.0
+scipy>=1.7.0
+opencv-python>=4.5.0
+
+# Deep Learning
+torch>=1.10.0
+torchvision>=0.11.0
+onnxruntime-gpu>=1.12.0  # Use 'onnxruntime' for CPU-only
+
+# Tracking (optional, for faster linear assignment)
+# lap>=0.4.0  # Uncomment for faster Hungarian algorithm
