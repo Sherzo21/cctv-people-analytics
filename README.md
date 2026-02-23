@@ -97,6 +97,6 @@ AI Engineer | Computer Vision | CCTV Analytics Systems
 
 
 Quick way to confirm what you actually need
-Run this once in your project env:
+Run this once in your env:
 python -c "import cv2, numpy, torch, torchvision, onnxruntime; from PIL import Image; print('OK')"
 
