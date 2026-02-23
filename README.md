@@ -1,62 +1,92 @@
-# People Tracker
+Real-Time CCTV People Analytics System
+YOLOv8 + ByteTrack + ResNet50 Gender Classification
 
-[![Downloads](https://img.shields.io/github/downloads/yakhyo/people-tracker/total)](https://github.com/yakhyo/people-tracker/releases)
-[![GitHub License](https://img.shields.io/github/license/yakhyo/people-tracker)](https://github.com/yakhyo/people-tracker/blob/main/LICENSE)
+📌 Overview
 
-Real-time multi-person tracking using [YOLOv8-CrowdHuman](https://github.com/yakhyo/yolov8-crowdhuman) + [**ByteTrack**](https://github.com/yakhyo/bytetrack-tracker).
+This project extends a YOLOv8-based people tracking system into a real-time CCTV analytics engine with:
+🔍 Multi-person detection (YOLOv8 ONNX)
+🧠 Real-time tracking (ByteTrack)
+👤 Gender classification (Custom-trained ResNet50)
+📊 Analytical reporting (Template-based structured report)
+🎥 Video processing with output saving
+📄 Automatic .txt analytics report generation
 
-<p align="center">
-  <img src="assets/out_video.gif" alt="People Tracker Demo">
-</p>
+The system supports:
+Webcam inference
+Offline video processing
+Batch analytics export
+
+Video/Webcam
+     ↓
+YOLOv8 (ONNX Detection)
+     ↓
+ByteTrack (ID Assignment)
+     ↓
+ResNet50 Gender Classification
+     ↓
+Voting Stabilization per Track ID
+     ↓
+Video Output + Analytics Report
+
+Key Features
+1. Real-Time People Tracking
+YOLOv8 ONNX inference
+ByteTrack multi-object tracking
+Stable ID assignment across frames
+
+2. Custom Gender Classification Model
+ResNet50 pretrained backbone
+Fine-tuned for binary gender classification
+Majority-vote stabilization per tracked ID
+Confidence threshold filtering
+
+3. Analytics Report Generation
+Automatically generates structured report:
+Example:
+Video Analysis Report
+----------------------
+Total unique people detected: 7
+Gender distribution: 4 Male, 3 Female
+Processed duration: 18.2 seconds
+
+4. Output Artifacts
+Processed tracking video
+Text analytics report
+Overlay with ID + Gender (M/F)
+
+Usage:
+1. Real-Time Webcam
+python main.py --source 0 --weights weights/yolov8n.onnx --gender_weights weights/best_resnet50_gender_model.pth --view --report_sec 10
+
+Optional parameters:
+--gender_every 5
+--gender_conf 0.7
+--report_sec 10
+--report_overlay
+
+2. Offline Video Analytics
+python video_gender_test.py
+
+Outputs:
+output_gender_tracking.mp4
+output_report.txt
 
 
-<details>
-<summary>Click to see higher quality video</summary>
 
-<video src="https://github.com/user-attachments/assets/1a658a67-9ce8-4c66-999a-b36391994abc" controls width="640"></video>
+Gender Model Details
+Backbone: ResNet50 (ImageNet pretrained)
+Input size: 224x224
+Loss: CrossEntropyLoss
+Optimizer: Adam
+Voting mechanism per track ID
+Confidence filtering threshold
 
-</details>
 
-## Installation
+Author
+Developed and extended by Sherzod Abdumalikov
+AI Engineer | Computer Vision | CCTV Analytics Systems
 
-```bash
-git clone https://github.com/yakhyo/people-tracker.git
-cd people-tracker
-pip install -r requirements.txt
-```
+Quick way to confirm what you actually need
+Run this once in your project env:
+python -c "import cv2, numpy, torch, torchvision, onnxruntime; from PIL import Image; print('OK')"
 
-### Download Weights
-
-```bash
-mkdir -p weights
-wget -P weights https://github.com/yakhyo/people-tracker/releases/download/weights/yolov8n.onnx
-```
-
-## Usage
-
-```bash
-python main.py --source 0 --view                    # Webcam
-python main.py --source video.mp4 --save            # Video (auto output name)
-python main.py --source video.mp4 --save out.mp4   # Video (custom output)
-python main.py --source image.jpg --save            # Image
-```
-
-**Controls:** `q` quit, `r` reset tracker
-
-## Project Structure
-
-```
-people-tracker/
-├── assets/          # Sample videos
-├── bytetrack/       # ByteTrack tracker
-├── models/          # YOLOv8 ONNX detector
-├── weights/         # Model weights
-├── utils.py         # Visualization
-├── main.py          # Entry point
-└── requirements.txt
-```
-
-## References
-
-- [YOLOv8-CrowdHuman](https://github.com/yakhyo/yolov8-crowdhuman) - YOLOv8 trained on CrowdHuman dataset
-- [ByteTrack](https://github.com/yakhyo/bytetrack-tracker) - Multi-object tracking

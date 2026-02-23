@@ -1,9 +1,4 @@
-# Copyright 2026 Yakhyokhuja Valikhujaev
-# Author: Yakhyokhuja Valikhujaev
-# GitHub: https://github.com/yakhyo
-
 from typing import Tuple
-
 import cv2
 import numpy as np
 
@@ -101,6 +96,7 @@ def draw_tracks(
     show_info: bool = True,
     fps: float = 0.0,
     total_ids: int = 0,
+    id_to_gender: dict[int, str] | None = None,
 ) -> None:
     """Draw tracked objects on image.
 
@@ -127,6 +123,12 @@ def draw_tracks(
         # Draw track ID label
         if show_id:
             label = f"{track_id}"
+            if id_to_gender:
+                g = id_to_gender.get(track_id, None)
+                if g == "male":
+                    label = f"{track_id} M"
+                elif g == "female":
+                    label = f"{track_id} F"
             (label_w, label_h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.35, 1)
 
             # Label background

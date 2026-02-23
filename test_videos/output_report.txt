@@ -1,0 +1,5 @@
+Video Analysis Report
+----------------------
+Total unique people detected: 23
+Gender distribution: 12 Male, 11 Female
+Processed duration: 830.2 seconds

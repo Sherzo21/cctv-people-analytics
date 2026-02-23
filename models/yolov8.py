@@ -1,9 +1,4 @@
-# Copyright 2026 Yakhyokhuja Valikhujaev
-# Author: Yakhyokhuja Valikhujaev
-# GitHub: https://github.com/yakhyo
-
 from typing import Tuple
-
 import cv2
 import numpy as np
 import onnxruntime
@@ -61,7 +56,7 @@ class YOLOv8:
 
         self.orig_height, self.orig_width = image.shape[:2]
 
-        # Preprocess with letterbox
+        #Preprocess with letterbox
         img, self.ratio, (self.pad_w, self.pad_h) = self._letterbox(image, self.img_size)
 
         return self._detect(img)
@@ -76,14 +71,14 @@ class YOLOv8:
             self.output_names = [x.name for x in self.session.get_outputs()]
             self.input_names = [x.name for x in self.session.get_inputs()]
 
-            # Get input shape from model
+            #Get input shape from model
             input_shape = self.session.get_inputs()[0].shape
             self.img_size = (
                 input_shape[2] if isinstance(input_shape[2], int) else 640,
                 input_shape[3] if isinstance(input_shape[3], int) else 640,
             )
 
-            # Get model metadata
+            #Get model metadata
             metadata = self.session.get_modelmeta().custom_metadata_map
             self.stride = int(metadata.get("stride", 32))
             self.names = eval(metadata.get("names", "{0: 'person'}"))
@@ -133,13 +128,13 @@ class YOLOv8:
 
     def _postprocess(self, prediction: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         """Process model output to get detections."""
-        # YOLOv8 output: [1, 4+num_classes, num_boxes] -> [num_boxes, 4+num_classes]
+        #YOLOv8 output: [1, 4+num_classes, num_boxes] -> [num_boxes, 4+num_classes]
         outputs = np.squeeze(prediction[0]).T
 
         boxes = outputs[:, :4]  # x_center, y_center, width, height
         class_scores = outputs[:, 4:]
 
-        # Get max class score and class id
+        #Get max class score and class id
         if class_scores.ndim == 1:
             scores = class_scores
             class_ids = np.zeros(len(scores), dtype=np.int32)
@@ -147,20 +142,20 @@ class YOLOv8:
             scores = np.max(class_scores, axis=1)
             class_ids = np.argmax(class_scores, axis=1)
 
-        # Apply confidence threshold
+        #Apply confidence threshold
         mask = scores > self.conf_thres
         boxes, scores, class_ids = boxes[mask], scores[mask], class_ids[mask]
 
         if len(boxes) == 0:
             return np.array([]), np.array([]), np.array([])
 
-        # Convert xywh to xyxy
+        #Convert xywh to xyxy
         boxes = self._xywh2xyxy(boxes)
 
-        # Scale boxes to original image size
+        #Scale boxes to original image size
         boxes = self._scale_boxes(boxes)
 
-        # Apply NMS
+        #Apply NMS
         if self.nms_mode == "torchvision":
             indices = torchvision.ops.nms(
                 torch.tensor(boxes, dtype=torch.float32),
