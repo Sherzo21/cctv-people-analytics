@@ -82,9 +82,19 @@ Voting mechanism per track ID
 Confidence filtering threshold
 
 
+## Acknowledgment
+
+This project extends the original People Tracker implementation by
+[yakhyo](https://github.com/yakhyo/people-tracker),
+with additional modules for gender classification,
+analytics reporting, and structured export.
+
+
 Author
 Developed and extended by Sherzod Abdumalikov
 AI Engineer | Computer Vision | CCTV Analytics Systems
+
+
 
 Quick way to confirm what you actually need
 Run this once in your project env:
